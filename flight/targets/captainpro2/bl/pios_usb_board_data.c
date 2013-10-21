@@ -38,7 +38,7 @@ static const uint8_t usb_product_id[26] = {
 	USB_DESC_TYPE_STRING,
 	'C', 0,
 	'a', 0,
-	'P', 0,
+	'p', 0,
 	't', 0,
 	'a', 0,
 	'i', 0,

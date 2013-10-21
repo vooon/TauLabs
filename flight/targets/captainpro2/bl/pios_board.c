@@ -72,8 +72,8 @@ void PIOS_Board_Init() {
 	/* Inititialize all flash drivers */
 	PIOS_Flash_Internal_Init(&pios_internal_flash_id, &flash_internal_cfg);
 
-#if defined(PIOS_INCLUDE_SPI) && defined(PIOS_INCLUDE_EXTERNAL_FLASH_WAYPOINTS)
-	PIOS_Flash_Jedec_Init(&pios_external_flash_id, pios_spi_flash_id, 0, &flash_m25p_cfg);
+#if defined(PIOS_INCLUDE_SPI)
+	//PIOS_Flash_Jedec_Init(&pios_external_flash_id, pios_spi_flash_id, 0, &flash_m25p_cfg);
 #endif	/* PIOS_INCLUDE_SPI */
 
 	/* Register the partition table */
