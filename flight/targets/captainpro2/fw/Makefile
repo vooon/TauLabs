@@ -6,7 +6,7 @@
 # @{
 # @addtogroup 
 # @{
-# @brief Makefile to build firmware for discoveryF4 eval board.
+# @brief Makefile to build firmware for Captain Pro2 board.
 ###############################################################################
 #
 # This program is free software; you can redistribute it and/or modify
@@ -33,28 +33,28 @@ DEBUG ?= NO
 
 # List of modules to include
 MODULES =
-#MODULES = Sensors
-#MODULES += Attitude/revolution 
-#MODULES += Actuator
+MODULES = Sensors
+MODULES += Attitude/revolution 
+MODULES += Actuator
 MODULES += ManualControl
-#MODULES += Stabilization
+MODULES += Stabilization
 MODULES += FirmwareIAP
 MODULES += Telemetry
 
-#OPTMODULES += GPS
-#OPTMODULES += PathPlanner
-#OPTMODULES += AltitudeHold 
-#OPTMODULES += VtolPathFollower 
-#OPTMODULES += FixedWingPathFollower
-#OPTMODULES += GroundPathFollower
-#OPTMODULES += CameraStab
-#OPTMODULES += Autotune
-#OPTMODULES += TxPID
-#OPTMODULES += VibrationAnalysis
-#OPTMODULES += UAVOMavlinkBridge
-#OPTMODULES += Battery
-#OPTMODULES += ComUsbBridge
-#OPTMODULES += Airspeed/revolution
+OPTMODULES += GPS
+OPTMODULES += PathPlanner
+OPTMODULES += AltitudeHold 
+OPTMODULES += VtolPathFollower 
+OPTMODULES += FixedWingPathFollower
+OPTMODULES += GroundPathFollower
+OPTMODULES += CameraStab
+OPTMODULES += Autotune
+OPTMODULES += TxPID
+OPTMODULES += VibrationAnalysis
+OPTMODULES += UAVOMavlinkBridge
+OPTMODULES += Battery
+OPTMODULES += ComUsbBridge
+OPTMODULES += Airspeed/revolution
 
 
 # Paths
@@ -124,17 +124,17 @@ SRC += $(MATHLIB)/atmospheric_math.c
 include $(PIOS)/STM32F4xx/library_fw.mk
 
 ## PIOS Hardware (Common)
-#SRC += $(PIOSCOMMON)/pios_mpu6050.c
+SRC += $(PIOSCOMMON)/pios_mpu6050.c
 SRC += $(PIOSCOMMON)/pios_gcsrcvr.c
-#SRC += $(PIOSCOMMON)/pios_hmc5883.c
-#SRC += $(PIOSCOMMON)/pios_ms5611.c
+SRC += $(PIOSCOMMON)/pios_hmc5883.c
+SRC += $(PIOSCOMMON)/pios_ms5611.c
 SRC += $(PIOSCOMMON)/pios_etasv3.c
 SRC += $(PIOSCOMMON)/pios_mpxv5004.c
 SRC += $(PIOSCOMMON)/pios_mpxv7002.c
 SRC += $(PIOSCOMMON)/pios_crc.c
 SRC += $(PIOSCOMMON)/pios_com.c
 SRC += $(PIOSCOMMON)/pios_rcvr.c
-#SRC += $(PIOSCOMMON)/pios_sensors.c
+SRC += $(PIOSCOMMON)/pios_sensors.c
 SRC += $(PIOSCOMMON)/pios_flash.c
 SRC += $(PIOSCOMMON)/pios_flash_jedec.c
 SRC += $(PIOSCOMMON)/pios_flashfs_logfs.c
@@ -238,8 +238,10 @@ ifeq ($(ENABLE_DEBUG_CONSOLE), YES)
 CDEFS += -DPIOS_INCLUDE_DEBUG_CONSOLE
 endif
 
-CDEFS += -DEE_BANK_BASE=$(EE_BANK_BASE)
-CDEFS += -DEE_BANK_SIZE=$(EE_BANK_SIZE)
+ifeq ($(ENABLE_DEBUG_CONSOLE), YES)
+CDEFS += -DPIOS_INCLUDE_DEBUG_CONSOLE
+endif
+
 
 # Declare all non-optional modules as built-in to force inclusion, strip off any appended varieties of module
 get_mod_name = $(shell echo $(1) | sed "s/\/[^\/]*$///")
@@ -279,6 +281,7 @@ CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS)) -I.
 CFLAGS += -mapcs-frame
 CFLAGS += -fomit-frame-pointer
 CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -Wdouble-promotion
 
 CFLAGS += -Wall
 CFLAGS += -Werror

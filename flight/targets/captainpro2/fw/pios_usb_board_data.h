@@ -2,7 +2,7 @@
  ******************************************************************************
  * @addtogroup TauLabsTargets Tau Labs Targets
  * @{
- * @addtogroup DiscoveryF4 DiscoveryF4 support files
+ * @addtogroup CaptainPro2 Captain Pro2 support files
  * @{
  *
  * @file       pios_usb_board_data.h
