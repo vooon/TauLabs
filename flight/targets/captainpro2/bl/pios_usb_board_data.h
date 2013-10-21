@@ -2,7 +2,7 @@
  ******************************************************************************
  * @addtogroup TauLabsBootloader Tau Labs Bootloaders
  * @{
- * @addtogroup DiscoveryF4BL DiscoveryF4B bootloader
+ * @addtogroup CaptainPro2BL Captain Pro2 bootloader
  * @{
  *
  * @file       pios_usb_board_data.h
@@ -36,6 +36,11 @@
 #define PIOS_USB_BOARD_EP_NUM 2
 
 #include "pios_usb_defs.h" 	/* struct usb_* */
+
+/*
+ * For now enumerate as a OpenPilot Revolution board until
+ * the usb enumeration in gcs has been extended to support multiple vendor ids
+ */
 
 #define PIOS_USB_BOARD_VENDOR_ID USB_VENDOR_ID_CLAYLOGIC
 #define PIOS_USB_BOARD_PRODUCT_ID USB_PRODUCT_ID_DISCOVERYF4

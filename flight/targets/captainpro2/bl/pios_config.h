@@ -2,7 +2,7 @@
  ******************************************************************************
  * @addtogroup TauLabsBootloader Tau Labs Bootloaders
  * @{
- * @addtogroup DiscoveryF4BL DiscoveryF4B bootloader
+ * @addtogroup CaptainPro2BL Captain Pro2 bootloader
  * @{
  *
  * @file       pios_config.h 
