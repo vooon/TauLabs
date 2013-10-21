@@ -2,12 +2,12 @@
  ******************************************************************************
  * @addtogroup TauLabsTargets Tau Labs Targets
  * @{
- * @addtogroup FlyingF3 FlyingF3 support files
+ * @addtogroup CaptainPro2 Captain Pro2 support files
  * @{
  *
- * @file       STM32F4xx_DiscoveryF4 
+ * @file       STM32F4xx_CaptainPro2.c 
  * @author     Tau Labs, http://taulabs.org, Copyright (C) 2012-2013
- * @brief      Board header file for DiscoveryF4
+ * @brief      Board header file for Captain Pro2
  * @see        The GNU Public License (GPL) Version 3
  * 
  *****************************************************************************/
@@ -32,6 +32,13 @@
 #define STM32F4XX_DISCOVERYF4_H_
 
 #include <stdbool.h>
+
+#if defined(PIOS_INCLUDE_DEBUG_CONSOLE)
+#define DEBUG_LEVEL 0
+#define DEBUG_PRINTF(level, ...) {if(level <= DEBUG_LEVEL && pios_com_debug_id > 0) { PIOS_COM_SendFormattedStringNonBlocking(pios_com_debug_id, __VA_ARGS__); }}
+#else
+#define DEBUG_PRINTF(level, ...)
+#endif	/* PIOS_INCLUDE_DEBUG_CONSOLE */
 
 //------------------------
 // Timers and Channels Used
@@ -69,9 +76,9 @@ TIM8  |           |           |           |
 //------------------------
 // BOOTLOADER_SETTINGS
 //------------------------
-#define BOARD_READABLE	true
-#define BOARD_WRITABLE	true
-#define MAX_DEL_RETRYS	3
+#define BOARD_READABLE					true
+#define BOARD_WRITABLE					true
+#define MAX_DEL_RETRYS					3
 
 
 //------------------------
@@ -81,9 +88,9 @@ TIM8  |           |           |           |
 #define PIOS_LED_B		1 /* Green */
 #define PIOS_LED_C		2 /* Blue */
 
-#define PIOS_LED_HEARTBEAT	PIOS_LED_C
+#define PIOS_LED_HEARTBEAT	PIOS_LED_B
 #define PIOS_LED_ALARM		PIOS_LED_A
-#define PIOS_LED_USB		PIOS_LED_B
+#define PIOS_LED_USB		PIOS_LED_C
 
 #define USB_LED_ON			PIOS_LED_On(PIOS_LED_USB)
 #define USB_LED_OFF			PIOS_LED_Off(PIOS_LED_USB)
@@ -93,16 +100,15 @@ TIM8  |           |           |           |
 //------------------------
 // PIOS_WDG
 //------------------------
-#define PIOS_WATCHDOG_TIMEOUT    250 /* (ms) */
-#define PIOS_WDG_REGISTER        RTC_BKP_DR4
+#define PIOS_WATCHDOG_TIMEOUT			250 /* (ms) */
+#define PIOS_WDG_REGISTER				RTC_BKP_DR4
 
 //------------------------
 // PIOS_I2C
 // See also pios_board.c
 //------------------------
-#define PIOS_I2C_MAX_DEVS			1
+#define PIOS_I2C_MAX_DEVS				1
 extern uint32_t pios_i2c_10dof_adapter_id;
-//#define PIOS_I2C_MPU6050_ADAPTER		(pios_i2c_gyro_accel_adapter_id)
 
 //-------------------------
 // PIOS_COM
@@ -110,18 +116,25 @@ extern uint32_t pios_i2c_10dof_adapter_id;
 // See also pios_board.c
 //-------------------------
 extern uintptr_t pios_com_telem_rf_id;
+extern uintptr_t pios_com_gps_id;
+extern uintptr_t pios_com_telem_usb_id;
+extern uintptr_t pios_com_bridge_id;
+extern uintptr_t pios_com_vcp_id;
+extern uintptr_t pios_com_mavlink_id;
+
+#define PIOS_COM_GPS                    (pios_com_gps_id)
+#define PIOS_COM_TELEM_USB              (pios_com_telem_usb_id)
 #define PIOS_COM_TELEM_RF               (pios_com_telem_rf_id)
+#define PIOS_COM_BRIDGE                 (pios_com_bridge_id)
+#define PIOS_COM_VCP                    (pios_com_vcp_id)
+#define PIOS_COM_MAVLINK                (pios_com_mavlink_id)
 
 #if defined(PIOS_INCLUDE_DEBUG_CONSOLE)
 extern uintptr_t pios_com_debug_id;
 #define PIOS_COM_DEBUG                  (pios_com_debug_id)
 #endif	/* PIOS_INCLUDE_DEBUG_CONSOLE */
 
-extern uintptr_t pios_com_vcp_id;
-#define PIOS_COM_VCP			(pios_com_vcp_id)
 
-extern uintptr_t pios_com_telem_usb_id;
-#define PIOS_COM_TELEM_USB              (pios_com_telem_usb_id)
 
 //------------------------
 // TELEMETRY

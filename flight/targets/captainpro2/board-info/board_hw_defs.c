@@ -2,13 +2,13 @@
  ******************************************************************************
  * @addtogroup TauLabsTargets Tau Labs Targets
  * @{
- * @addtogroup DiscoveryF4 DiscoveryF4 support files
+ * @addtogroup CaptainPro2 Captain Pro2 support files
  * @{
  *
  * @file       board_hw_defs.c 
  * @author     Tau Labs, http://taulabs.org, Copyright (C) 2012-2013
  * @brief      Defines board specific static initializers for hardware for the
- *             DiscoveryF4 board.
+ *             Captain Pro2 board.
  * @see        The GNU Public License (GPL) Version 3
  * 
  *****************************************************************************/
@@ -160,9 +160,9 @@ static const struct pios_spi_cfg pios_spi_flash_cfg = {
 				.DMA_Mode               = DMA_Mode_Normal,
 				.DMA_Priority           = DMA_Priority_Medium,
 				.DMA_FIFOMode           = DMA_FIFOMode_Disable,
-				.DMA_FIFOThreshold      = DMA_FIFOThreshold_Full,
-				.DMA_MemoryBurst        = DMA_MemoryBurst_Single,
-				.DMA_PeripheralBurst    = DMA_PeripheralBurst_Single,
+                .DMA_FIFOThreshold      = DMA_FIFOThreshold_Full,
+                .DMA_MemoryBurst        = DMA_MemoryBurst_Single,
+                .DMA_PeripheralBurst    = DMA_PeripheralBurst_Single,
 			},
 		},
 	},
@@ -442,6 +442,49 @@ void PIOS_I2C_10dof_adapter_er_irq_handler(void)
 
 #include "pios_usart_priv.h"
 
+static const struct pios_usart_cfg pios_usart1_cfg = {
+	.regs = USART1,
+	.remap = GPIO_AF_USART1,
+	.init = {
+		.USART_BaudRate = 57600,
+		.USART_WordLength = USART_WordLength_8b,
+		.USART_Parity = USART_Parity_No,
+		.USART_StopBits = USART_StopBits_1,
+		.USART_HardwareFlowControl = USART_HardwareFlowControl_None,
+		.USART_Mode = USART_Mode_Rx | USART_Mode_Tx,
+	},
+	.irq = {
+		.init = {
+			.NVIC_IRQChannel = USART1_IRQn,
+			.NVIC_IRQChannelPreemptionPriority = PIOS_IRQ_PRIO_MID,
+			.NVIC_IRQChannelSubPriority = 0,
+			.NVIC_IRQChannelCmd = ENABLE,
+		},
+	},
+	.rx = {
+		.gpio = GPIOA,
+		.init = {
+			.GPIO_Pin   = GPIO_Pin_10,
+			.GPIO_Speed = GPIO_Speed_2MHz,
+			.GPIO_Mode  = GPIO_Mode_AF,
+			.GPIO_OType = GPIO_OType_PP,
+			.GPIO_PuPd  = GPIO_PuPd_UP
+		},
+		.pin_source = GPIO_PinSource10,
+	},
+	.tx = {
+		.gpio = GPIOA,
+		.init = {
+			.GPIO_Pin   = GPIO_Pin_9,
+			.GPIO_Speed = GPIO_Speed_2MHz,
+			.GPIO_Mode  = GPIO_Mode_AF,
+			.GPIO_OType = GPIO_OType_PP,
+			.GPIO_PuPd  = GPIO_PuPd_UP
+		},
+		.pin_source = GPIO_PinSource9,
+	},
+};
+
 static const struct pios_usart_cfg pios_usart3_cfg = {
 	.regs = USART3,
 	.remap = GPIO_AF_USART3,
@@ -474,6 +517,49 @@ static const struct pios_usart_cfg pios_usart3_cfg = {
 	},
 	.tx = {
 		.gpio = GPIOB,
+		.init = {
+			.GPIO_Pin   = GPIO_Pin_10,
+			.GPIO_Speed = GPIO_Speed_2MHz,
+			.GPIO_Mode  = GPIO_Mode_AF,
+			.GPIO_OType = GPIO_OType_PP,
+			.GPIO_PuPd  = GPIO_PuPd_UP
+		},
+		.pin_source = GPIO_PinSource10,
+	},
+};
+
+static const struct pios_usart_cfg pios_usart4_cfg = {
+	.regs = USART4,
+	.remap = GPIO_AF_USART4,
+	.init = {
+		.USART_BaudRate = 57600,
+		.USART_WordLength = USART_WordLength_8b,
+		.USART_Parity = USART_Parity_No,
+		.USART_StopBits = USART_StopBits_1,
+		.USART_HardwareFlowControl = USART_HardwareFlowControl_None,
+		.USART_Mode = USART_Mode_Rx | USART_Mode_Tx,
+	},
+	.irq = {
+		.init = {
+			.NVIC_IRQChannel = USART4_IRQn,
+			.NVIC_IRQChannelPreemptionPriority = PIOS_IRQ_PRIO_MID,
+			.NVIC_IRQChannelSubPriority = 0,
+			.NVIC_IRQChannelCmd = ENABLE,
+		},
+	},
+	.rx = {
+		.gpio = GPIOC,
+		.init = {
+			.GPIO_Pin   = GPIO_Pin_11,
+			.GPIO_Speed = GPIO_Speed_2MHz,
+			.GPIO_Mode  = GPIO_Mode_AF,
+			.GPIO_OType = GPIO_OType_PP,
+			.GPIO_PuPd  = GPIO_PuPd_UP
+		},
+		.pin_source = GPIO_PinSource11,
+	},
+	.tx = {
+		.gpio = GPIOC,
 		.init = {
 			.GPIO_Pin   = GPIO_Pin_10,
 			.GPIO_Speed = GPIO_Speed_2MHz,
