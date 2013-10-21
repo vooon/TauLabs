@@ -528,9 +528,9 @@ static const struct pios_usart_cfg pios_usart3_cfg = {
 	},
 };
 
-static const struct pios_usart_cfg pios_usart4_cfg = {
-	.regs = USART4,
-	.remap = GPIO_AF_USART4,
+static const struct pios_usart_cfg pios_uart4_cfg = {
+	.regs = UART4,
+	.remap = GPIO_AF_UART4,
 	.init = {
 		.USART_BaudRate = 57600,
 		.USART_WordLength = USART_WordLength_8b,
@@ -541,7 +541,7 @@ static const struct pios_usart_cfg pios_usart4_cfg = {
 	},
 	.irq = {
 		.init = {
-			.NVIC_IRQChannel = USART4_IRQn,
+			.NVIC_IRQChannel = UART4_IRQn,
 			.NVIC_IRQChannelPreemptionPriority = PIOS_IRQ_PRIO_MID,
 			.NVIC_IRQChannelSubPriority = 0,
 			.NVIC_IRQChannelCmd = ENABLE,
