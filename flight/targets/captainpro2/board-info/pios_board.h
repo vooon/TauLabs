@@ -217,7 +217,26 @@ extern uintptr_t pios_com_debug_id;
 //-------------------------
 // ADC
 //-------------------------
-#define PIOS_ADC_SUB_DRIVER_MAX_INSTANCES       3
+#define PIOS_DMA_PIN_CONFIG                                                                 \
+{                                                                                           \
+	{GPIOB, GPIO_Pin_0,     ADC_Channel_8},                 /* Servo rail voltage 1/10 */   \
+	{GPIOB, GPIO_Pin_1,     ADC_Channel_9},                 /* Battery voltage 1/10 */      \
+	{NULL,  0,              ADC_Channel_Vrefint},           /* Voltage reference */         \
+	{NULL,  0,              ADC_Channel_TempSensor},        /* Temperature sensor */        \
+	{GPIOA, GPIO_Pin_4,     ADC_Channel_4},                                                \
+	{GPIOA, GPIO_Pin_5,     ADC_Channel_5},                                                \
+	{GPIOA, GPIO_Pin_6,     ADC_Channel_6},                                                \
+	{GPIOA, GPIO_Pin_7,     ADC_Channel_7}                                                 \
+}
+
+/* we have to do all this to satisfy the PIOS_ADC_MAX_SAMPLES define in pios_adc.h */
+/* which is annoying because this then determines the rate at which we generate buffer turnover events */
+/* the objective here is to get enough buffer space to support 100Hz averaging rate */
+#define PIOS_ADC_NUM_CHANNELS           8
+#define PIOS_ADC_MAX_OVERSAMPLING       2
+#define PIOS_ADC_USE_ADC2               0
+#define PIOS_ADC_VOLTAGE_SCALE 3.30/4096.0
+#define PIOS_ADC_SUB_DRIVER_MAX_INSTANCES       2
 
 //-------------------------
 // USB

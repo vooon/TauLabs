@@ -268,13 +268,12 @@ static const struct pios_flash_chip pios_flash_chip_internal = {
 
 /* Waypoints are stored in external flash which has a different configuration */
 #if defined (PIOS_INCLUDE_EXTERNAL_FLASH_WAYPOINTS)
-static const struct flashfs_logfs_cfg flashfs_external_waypoints_cfg = {
+static const struct flashfs_logfs_cfg flashfs_waypoints_cfg = {
 	.fs_magic      = 0x99abcecf,
 	.arena_size    = 0x00010000, /* 2048 * slot size */
 	.slot_size     = 0x00000040, /* 64 bytes */
 };
 
-#include "pios_flash_jedec_priv.h"
 
 static const struct pios_flash_jedec_cfg flash_m25p_cfg = {
   .expect_manufacturer = JEDEC_MANUFACTURER_ST,
@@ -639,6 +638,7 @@ static const struct pios_usb_cfg pios_usb_main_cfg = {
 			.GPIO_Speed = GPIO_Speed_25MHz,
 			.GPIO_Mode  = GPIO_Mode_IN,
 			.GPIO_OType = GPIO_OType_OD,
+			.GPIO_PuPd  = GPIO_PuPd_DOWN,
 		},
 	}
 };
@@ -691,6 +691,44 @@ const struct pios_usb_hid_cfg pios_usb_hid_cfg = {
 	.data_tx_ep = 1,
 };
 #endif	/* PIOS_INCLUDE_USB_HID && PIOS_INCLUDE_USB_CDC */
+
+#if defined(PIOS_INCLUDE_ADC)
+#include "pios_adc_priv.h"
+#include "pios_internal_adc_priv.h"
+
+void PIOS_ADC_DMA_irq_handler(void);
+void DMA2_Stream4_IRQHandler(void) __attribute__((alias("PIOS_ADC_DMA_irq_handler")));
+struct pios_internal_adc_cfg pios_adc_cfg = {
+	.adc_dev_master = ADC1,
+	.dma = {
+		.irq = {
+			.flags   = (DMA_FLAG_TCIF4 | DMA_FLAG_TEIF4 | DMA_FLAG_HTIF4),
+			.init    = {
+				.NVIC_IRQChannel                   = DMA2_Stream4_IRQn,
+				.NVIC_IRQChannelPreemptionPriority = PIOS_IRQ_PRIO_LOW,
+				.NVIC_IRQChannelSubPriority        = 0,
+				.NVIC_IRQChannelCmd                = ENABLE,
+			},
+		},
+		.rx = {
+			.channel = DMA2_Stream4,
+			.init    = {
+				.DMA_Channel                    = DMA_Channel_0,
+				.DMA_PeripheralBaseAddr = (uint32_t) & ADC1->DR
+			},
+		}
+	},
+	.half_flag = DMA_IT_HTIF4,
+	.full_flag = DMA_IT_TCIF4,
+};
+
+void PIOS_ADC_DMA_irq_handler(void)
+{
+	/* Call into the generic code to handle the IRQ for this specific device */
+	PIOS_INTERNAL_ADC_DMA_Handler();
+}
+
+#endif /* PIOS_INCLUDE_ADC */
 
 /**
  * @}
