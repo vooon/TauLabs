@@ -32,7 +32,6 @@ include $(BOARD_INFO_DIR)/board-info.mk
 DEBUG ?= NO
 
 # List of modules to include
-MODULES =
 MODULES = Sensors
 MODULES += Attitude/revolution 
 MODULES += Actuator
@@ -81,7 +80,6 @@ FLIGHTPLANLIB = $(OPMODULEDIR)/FlightPlan/lib
 FLIGHTPLANS = $(OPMODULEDIR)/FlightPlan/flightplans
 MAVLINKINC = $(FLIGHTLIB)/mavlink/v1.0/common
 
-SRC = 
 # optional component libraries
 include $(PIOSCOMMONLIB)/FreeRTOS/library.mk
 #include $(PIOSCOMMONLIB)/dosfs/library.mk
@@ -103,10 +101,10 @@ SRC += $(OPUAVTALK)/uavtalk.c
 SRC += $(OPUAVOBJ)/uavobjectmanager.c
 SRC += $(OPUAVOBJ)/eventdispatcher.c
 
-#ifeq ($(DEBUG),YES)
+ifeq ($(DEBUG),YES)
 SRC += $(DEBUG_CM3_DIR)/dcc_stdio.c
 SRC += $(DEBUG_CM3_DIR)/cm3_fault_handlers.c
-#endif
+endif
 
 SRC += $(FLIGHTLIB)/paths.c
 SRC += $(FLIGHTLIB)/fifo_buffer.c
@@ -124,6 +122,7 @@ SRC += $(MATHLIB)/atmospheric_math.c
 include $(PIOS)/STM32F4xx/library_fw.mk
 
 ## PIOS Hardware (Common)
+SRC += $(PIOSCOMMON)/pios_delay.c
 SRC += $(PIOSCOMMON)/pios_mpu6050.c
 SRC += $(PIOSCOMMON)/pios_gcsrcvr.c
 SRC += $(PIOSCOMMON)/pios_hmc5883.c
@@ -413,7 +412,7 @@ endif
 ifdef ComSpec
 -include $(shell md $(subst /,\\,$(OUTDIR))\dep 2>NUL) $(wildcard $(OUTDIR)/dep/*)
 else
--include $(shell mkdir -p $(OUTDIR) 2>/dev/null) $(shell mkdir $(OUTDIR)/dep 2>/dev/null) $(wildcard $(OUTDIR)/dep/*)
+-include $(shell mkdir $(OUTDIR) 2>/dev/null) $(shell mkdir $(OUTDIR)/dep 2>/dev/null) $(wildcard $(OUTDIR)/dep/*)
 endif
 
 # Listing of phony targets.
